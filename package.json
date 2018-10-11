@@ -1,0 +1,48 @@
+{
+  "name": "interstice",
+  "version": "1.0.0",
+  "description": "Icecast/SHOUTcast stream downloader and splitter",
+  "main": "lib/interstice.js",
+  "scripts": {
+    "lint": "standard cli.js lib/interstice.js test/interstice.spec.js",
+    "test": "tap test/*.spec.js",
+    "test:ui": "node test/interstice.ui.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atask/interstice.git"
+  },
+  "author": "Allan Taschini <allan.taschini@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/atask/interstice/issues"
+  },
+  "homepage": "https://github.com/atask/interstice#readme",
+  "dependencies": {
+    "commander": "2.19.0",
+    "icy": "2.1.0",
+    "moment": "2.22.2",
+    "ms": "2.1.1",
+    "node-id3": "0.1.7",
+    "ora": "3.0.0",
+    "sanitize-filename": "1.6.1",
+    "tunnel": "0.0.6"
+  },
+  "devDependencies": {
+    "mock-stdin": "0.3.1",
+    "proxyquire": "2.1.0",
+    "restore-cursor": "2.0.0",
+    "sinon": "6.3.5",
+    "standard": "12.0.1",
+    "tap": "12.0.1"
+  },
+  "engines": {
+    "node": ">=9.4.0"
+  },
+  "bin": {
+    "interstice": "./cli.js"
+  },
+  "files": [
+    "lib/errors.js"
+  ]
+}
