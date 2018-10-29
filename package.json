@@ -2,7 +2,7 @@
   "name": "interstice",
   "version": "2.0.0",
   "description": "Icecast/SHOUTcast stream downloader and splitter",
-  "main": "lib/interstice.js",
+  "main": "interstice.js",
   "scripts": {
     "lint": "standard interstice.js test*.js",
     "test": "tap test.js"
@@ -30,8 +30,5 @@
   },
   "engines": {
     "node": ">=9.4.0"
-  },
-  "files": [
-    "lib/errors.js"
-  ]
+  }
 }
