@@ -1,8 +1,6 @@
 const tap = require('tap')
 const proxyquire = require('proxyquire')
-
-const doubles = require('./interstice.test-doubles.js')
-const { DataTimeoutError } = require('../lib/errors')
+const doubles = require('./test-doubles.js')
 
 // tap.runOnly = true
 
@@ -21,7 +19,7 @@ tap.test('successfully split the mp3 stream', t => {
   let fsFake = doubles.FsFake()
   let momentStub = doubles.MomentFake()
 
-  let Interstice = proxyquire('../lib/interstice', {
+  let Interstice = proxyquire('./interstice.js', {
     'icy': icyStub,
     'node-id3': nodeId3Fake,
     'fs': fsFake,
@@ -67,7 +65,7 @@ tap.test('successfully split the mp3 stream', t => {
 tap.test('abort when endpoint is not reachable', t => {
   let icyStub = doubles.IcyFake({ failRequest: true })
 
-  let Interstice = proxyquire('../lib/interstice', {
+  let Interstice = proxyquire('./interstice.js', {
     'icy': icyStub
   })
 
@@ -95,7 +93,7 @@ tap.test('abort when no data is received', t => {
   let fsFake = doubles.FsFake()
   let momentStub = doubles.MomentFake()
 
-  let Interstice = proxyquire('../lib/interstice', {
+  let Interstice = proxyquire('./interstice.js', {
     'icy': icyStub,
     'node-id3': nodeId3Fake,
     'fs': fsFake,
@@ -109,7 +107,7 @@ tap.test('abort when no data is received', t => {
     { event: 'song:delete', payload: 'title1' },
     { event: 'song:start', payload: 'title2' },
     { event: 'song:delete', payload: 'title2' },
-    { event: 'error', payload: new DataTimeoutError(10) }
+    { event: 'error', payload: new Interstice.DataTimeoutError(10) }
   ]
 
   let rip = new Interstice({ output: 'testDir', timeout: 10 })

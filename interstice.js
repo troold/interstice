@@ -7,12 +7,6 @@ const sanitize = require('sanitize-filename')
 const NodeID3 = require('node-id3')
 const fs = require('fs')
 const moment = require('moment')
-const intersticeErrors = require('./errors')
-const {
-  ConnectionError,
-  DataTimeoutError,
-  FileDeleteError
-} = intersticeErrors
 
 const TIMESTAMP_FORMAT = 'YYYYMMDD[T]HHmmss[Z]'
 
@@ -163,4 +157,37 @@ class Interstice extends EventEmitter {
   }
 }
 
-module.exports = Object.assign(Interstice, intersticeErrors)
+class IntersticeError extends Error {
+  constructor (message) {
+    super(message)
+    this.name = this.constructor.name
+    Error.captureStackTrace(this, this.constructor)
+  }
+}
+
+class ConnectionError extends IntersticeError {
+  constructor (url) {
+    super(`Could not connect to ${url.href}`)
+    this.url = url
+  }
+}
+
+class DataTimeoutError extends IntersticeError {
+  constructor (delay) {
+    super(`Data was not received for ${delay}ms`)
+    this.delay = delay
+  }
+}
+
+class FileDeleteError extends IntersticeError {
+  constructor (filePath) {
+    super(`Could not delete ${path.basename(filePath)}`)
+    this.filePath = filePath
+  }
+}
+
+module.exports = Object.assign(Interstice, {
+  ConnectionError,
+  DataTimeoutError,
+  FileDeleteError
+})
