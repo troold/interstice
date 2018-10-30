@@ -187,6 +187,7 @@ class FileDeleteError extends IntersticeError {
 }
 
 module.exports = Object.assign(Interstice, {
+  IntersticeError,
   ConnectionError,
   DataTimeoutError,
   FileDeleteError
