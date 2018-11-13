@@ -1,6 +1,7 @@
 const tap = require('tap')
 const proxyquire = require('proxyquire')
 const doubles = require('./test-doubles.js')
+const eventFixtures = require('./test-fixtures.js')
 
 // tap.runOnly = true
 
@@ -27,23 +28,12 @@ tap.test('successfully split the mp3 stream', t => {
     'events': doubles.EventEmitterSpy
   })
 
-  let wantedEvents = [
-    { event: 'connection', payload: undefined },
-    { event: 'song:start', payload: 'title1' },
-    { event: 'song:delete', payload: 'title1' },
-    { event: 'song:start', payload: 'title2' },
-    { event: 'song:complete', payload: 'title2' },
-    { event: 'song:start', payload: 'title3' },
-    { event: 'song:delete', payload: 'title3' },
-    { event: 'stop', payload: undefined }
-  ]
-
   let rip = new Interstice({ output: 'testDir' })
 
   rip
     .start('http://www.example.com')
-    .on('song:start', title => {
-      if (title === 'title3') { rip.stop() }
+    .on('song:start', song => {
+      if (song.title === 'title3') { rip.stop() }
     })
     .on('stop', () => {
       let data1 = fsFake.files['testDir/20180101T001000Z-title1.mp3']
@@ -56,7 +46,7 @@ tap.test('successfully split the mp3 stream', t => {
       let data3 = fsFake.files['testDir/20180101T001200Z-title3.mp3']
       t.equal(data3.deleted, true, 'canceled songs are trashed')
 
-      t.same(rip.events, wantedEvents, 'events are emitted in correct order')
+      t.same(rip.events, eventFixtures.split, 'events are emitted in correct order')
 
       t.end()
     })
@@ -101,15 +91,6 @@ tap.test('abort when no data is received', t => {
     'events': doubles.EventEmitterSpy
   })
 
-  let wantedEvents = [
-    { event: 'connection', payload: undefined },
-    { event: 'song:start', payload: 'title1' },
-    { event: 'song:delete', payload: 'title1' },
-    { event: 'song:start', payload: 'title2' },
-    { event: 'song:delete', payload: 'title2' },
-    { event: 'error', payload: new Interstice.DataTimeoutError(10) }
-  ]
-
   let rip = new Interstice({ output: 'testDir', timeout: 10 })
 
   rip
@@ -121,7 +102,7 @@ tap.test('abort when no data is received', t => {
       let data2 = fsFake.files['testDir/20180101T001100Z-title2.mp3']
       t.equal(data2.deleted, true, 'incomplete song is trashed')
 
-      t.same(rip.events, wantedEvents, 'events are emitted in correct order')
+      t.same(rip.events, eventFixtures.abort, 'events are emitted in correct order')
 
       t.end()
     })

@@ -1,10 +1,10 @@
 const EventEmitter = require('events')
 const url = require('url')
 const icy = require('icy')
-
 const path = require('path')
 const sanitize = require('sanitize-filename')
 const NodeID3 = require('node-id3')
+const pick = require('lodash/pick')
 const fs = require('fs')
 const moment = require('moment')
 
@@ -135,20 +135,22 @@ class Interstice extends EventEmitter {
       let tag = NodeID3.create({ title })
       stream.write(tag)
       song.stream = stream
-      this.emit('song:start', title)
+      let payload = pick(song, [ 'title', 'filePath' ])
+      this.emit('song:start', payload)
     }
     song.stream.write(data)
   }
 
   _endSong (song) {
     song.stream.end()
+    let payload = pick(song, [ 'title', 'filePath' ])
     if (song.toDelete) {
       fs.unlink(song.filePath, err => {
         if (err) { this.emit('error', new FileDeleteError(song.filePath)) }
       })
-      this.emit('song:delete', song.title)
+      this.emit('song:delete', payload)
     } else {
-      this.emit('song:complete', song.title)
+      this.emit('song:complete', payload)
     }
   }
 
