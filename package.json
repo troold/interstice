@@ -1,6 +1,6 @@
 {
   "name": "interstice",
-  "version": "3.0.2",
+  "version": "4.0.0",
   "description": "Icecast/SHOUTcast stream downloader and splitter",
   "main": "interstice.js",
   "scripts": {
