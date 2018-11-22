@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="137" height="136">
+  <defs>
+    <filter id="gauss" x="-100%" y="-100%" width="400%" height="400%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="7"/>
+    </filter>
+    <filter id="gaussOther">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="7"/>
+    </filter>
+    <filter id="gaussOld" x="-10" y="-18" width="100" height="100">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+    <symbol id="bracket-right">
+      <path d="m0 0 h 21 v 76 h -21 v -7 h 13 v -62 h -13 z"/>
+    </symbol>
+    <symbol id="bracket-left">
+      <path d="m0 0 h 21 v 7 h -13 v 62 h 13 v 7 h -21 z"/>
+    </symbol>
+    <symbol id="3d-bracket-right">
+      <use xlink:href="#bracket-right" y="8" fill="#001135" filter="url(#gauss)"/>
+      <use xlink:href="#bracket-right" y="7" fill="#4d4d4f"/>
+      <use xlink:href="#bracket-right" y="6" fill="#636466"/>
+      <use xlink:href="#bracket-right" y="5" fill="#77787b"/>
+      <use xlink:href="#bracket-right" y="4" fill="#8a8c8e"/>
+      <use xlink:href="#bracket-right" y="3" fill="#9d9fa2"/>
+      <use xlink:href="#bracket-right" y="2" fill="#b1b3b6"/>
+      <use xlink:href="#bracket-right" y="1" fill="#c7c8ca"/>
+      <use xlink:href="#bracket-right" fill="#ffffff"/>
+    </symbol>
+    <symbol id="3d-bracket-left">
+      <use xlink:href="#bracket-left" y="8" fill="#001135" filter="url(#gauss)"/>
+      <use xlink:href="#bracket-left" y="7" fill="#4d4d4f"/>
+      <use xlink:href="#bracket-left" y="6" fill="#636466"/>
+      <use xlink:href="#bracket-left" y="5" fill="#77787b"/>
+      <use xlink:href="#bracket-left" y="4" fill="#8a8c8e"/>
+      <use xlink:href="#bracket-left" y="3" fill="#9d9fa2"/>
+      <use xlink:href="#bracket-left" y="2" fill="#b1b3b6"/>
+      <use xlink:href="#bracket-left" y="1" fill="#c7c8ca"/>
+      <use xlink:href="#bracket-left" fill="#ffffff"/>
+    </symbol>
+  </defs>
+
+  <!--
+  negative scale and blur filter won't combine
+  (https://stackoverflow.com/q/25718697)
+  -->
+  <rect x="0" y="0" width="100%" height="100%" fill="white"/>
+  <use xlink:href="#3d-bracket-right" x="30" y="30"/>
+  <use xlink:href="#3d-bracket-left" x="86" y="30"/>
+</svg>
