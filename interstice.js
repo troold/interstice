@@ -122,7 +122,7 @@ class Interstice extends EventEmitter {
   }
 
   _queueSong (dir, title, offset, toDelete) {
-    let timestamp = moment().utc().format(TIMESTAMP_FORMAT)
+    let timestamp = moment().format(TIMESTAMP_FORMAT)
     let saneFileName = sanitize(`${timestamp}-${title}`)
     let filePath = path.join(dir, `${saneFileName}.mp3`)
     this.songs.push({ title, filePath, offset, toDelete })
