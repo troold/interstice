@@ -14,7 +14,7 @@
 ## Install
 
 ```
-$ npm install interstice
+$ npm install troold/interstice
 ```
 
 **NOTE:** Interstice will work only with Node.js 9.4 or newer.
