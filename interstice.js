@@ -71,7 +71,7 @@ class Interstice extends EventEmitter {
 
   _onMetadata (metadata) {
     let meta = icy.parse(metadata)
-    let streamTitle = meta.StreamTitle
+    let streamTitle = meta.StreamTitle.trim().replace(/\s/g, '_')
     let offset = this.icyRes.readableLength
     let willDelete = this.isFirstSong && this.deleteIncomplete
     this.isFirstSong = false
