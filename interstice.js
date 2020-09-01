@@ -22,7 +22,7 @@ class Interstice extends EventEmitter {
     this.timeout = timeout
   }
 
-  start (endpoint) {
+  start (endpoint, filename = false) {
     this.icyReq = null
     this.icyRes = null
     this.noDataTimeout = null
@@ -30,6 +30,7 @@ class Interstice extends EventEmitter {
     this.isFirstSong = true
     this.deleteIncomplete = true
     this.songs = []
+    this.filename = filename
 
     let endpointUrl = url.parse(endpoint)
     if (this.agent) { endpointUrl.agent = this.agent }
@@ -123,17 +124,24 @@ class Interstice extends EventEmitter {
 
   _queueSong (dir, title, offset, toDelete) {
     let timestamp = moment().format(TIMESTAMP_FORMAT)
-    let saneFileName = sanitize(`${timestamp}-${title}`)
-    let filePath = path.join(dir, `${saneFileName}.mp3`)
+    let saneFileName = ''
+    let filePath = ''
+    if (this.filename) {
+      saneFileName = sanitize(`${timestamp}-${this.filename}`)
+      filePath = path.join(dir, `${saneFileName}.mp3`)
+    } else {
+      saneFileName = sanitize(`${timestamp}-${title}`)
+      filePath = path.join(dir, `${saneFileName}.mp3`)
+    }
     this.songs.push({ title, filePath, offset, toDelete })
   }
 
   _writeSong (song, data) {
     if (song.stream == null) {
       let stream = fs.createWriteStream(song.filePath)
-      let title = song.title
+      let title = song.title;
       let tag = NodeID3.create({ title })
-      stream.write(tag)
+
       song.stream = stream
       let payload = pick(song, [ 'title', 'filePath' ])
       this.emit('song:start', payload)
