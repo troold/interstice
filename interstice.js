@@ -12,10 +12,10 @@ const TIMESTAMP_FORMAT = 'YYYYMMDD[T]HHmmss[Z]'
 
 class Interstice extends EventEmitter {
   constructor ({
-    output = '.',
-    agent = null,
-    timeout = 0
-  } = {}) {
+                 output = '.',
+                 agent = null,
+                 timeout = 0
+               } = {}) {
     super()
     this.output = output
     this.agent = agent
@@ -40,8 +40,8 @@ class Interstice extends EventEmitter {
 
   _connect (url) {
     this.icyReq = icy
-      .get(url, this._onIcyResponse.bind(this))
-      .on('error', () => { this.emit('error', new ConnectionError(url)) })
+        .get(url, this._onIcyResponse.bind(this))
+        .on('error', () => { this.emit('error', new ConnectionError(url)) })
   }
 
   _onIcyResponse (res) {
@@ -49,24 +49,24 @@ class Interstice extends EventEmitter {
     this.emit('connection')
     this._startTimeout()
     res
-      .on('metadata', this._onMetadata.bind(this))
-      .on('readable', () => {
-        let chunk = null
-        while ((chunk = res.read()) !== null && this.isStopped === false) {
-          this._onData(chunk)
-        }
-      })
+        .on('metadata', this._onMetadata.bind(this))
+        .on('readable', () => {
+          let chunk = null
+          while ((chunk = res.read()) !== null && this.isStopped === false) {
+            this._onData(chunk)
+          }
+        })
   }
 
   _cleanUp () {
     this.icyRes.removeAllListeners()
     if (this.songs.length) {
       this.songs
-        .filter(song => song.stream != null)
-        .forEach(song => {
-          song.toDelete = this.deleteIncomplete
-          this._endSong(song)
-        })
+          .filter(song => song.stream != null)
+          .forEach(song => {
+            song.toDelete = this.deleteIncomplete
+            this._endSong(song)
+          })
     }
   }
 
@@ -110,11 +110,11 @@ class Interstice extends EventEmitter {
   _startTimeout () {
     if (this.timeout === 0) { return null }
     this.noDataTimeout = setTimeout(
-      () => {
-        this._cleanUp()
-        this.emit('error', new DataTimeoutError(this.timeout))
-      },
-      this.timeout
+        () => {
+          this._cleanUp()
+          this.emit('error', new DataTimeoutError(this.timeout))
+        },
+        this.timeout
     )
   }
 
@@ -127,7 +127,7 @@ class Interstice extends EventEmitter {
     let saneFileName = ''
     let filePath = ''
     if (this.filename) {
-      saneFileName = sanitize(`${timestamp}-${this.filename}`)
+      saneFileName = sanitize(`${this.filename}`)
       filePath = path.join(dir, `${saneFileName}.mp3`)
     } else {
       saneFileName = sanitize(`${timestamp}-${title}`)
@@ -138,7 +138,12 @@ class Interstice extends EventEmitter {
 
   _writeSong (song, data) {
     if (song.stream == null) {
-      let stream = fs.createWriteStream(song.filePath)
+      let stream = null;
+      if (this.filename) {
+        stream = fs.createWriteStream(song.filePath, {flags: 'a'});
+      } else {
+        stream = fs.createWriteStream(song.filePath);
+      }
       let title = song.title;
       let tag = NodeID3.create({ title })
 
