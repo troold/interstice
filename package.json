@@ -19,7 +19,7 @@
   "homepage": "https://github.com/atask/interstice#readme",
   "dependencies": {
     "icy": "2.1.0",
-    "lodash": "4.17.11",
+    "lodash": "4.17.21",
     "moment": "2.22.2",
     "node-id3": "0.1.7",
     "sanitize-filename": "1.6.1"
