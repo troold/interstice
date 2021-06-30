@@ -58,13 +58,13 @@ class Interstice extends EventEmitter {
         })
   }
 
-  _cleanUp () {
+  _cleanUp (deleteIncomplete = true) {
     this.icyRes.removeAllListeners()
     if (this.songs.length) {
       this.songs
           .filter(song => song.stream != null)
           .forEach(song => {
-            song.toDelete = this.deleteIncomplete
+            song.toDelete = deleteIncomplete && this.deleteIncomplete
             this._endSong(song)
           })
     }
@@ -100,7 +100,7 @@ class Interstice extends EventEmitter {
     }
 
     if (this.isStopped) {
-      this._cleanUp()
+      this._cleanUp(false)
       this.emit('stop')
     } else {
       this._startTimeout()
