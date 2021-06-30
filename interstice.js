@@ -52,7 +52,7 @@ class Interstice extends EventEmitter {
         .on('metadata', this._onMetadata.bind(this))
         .on('readable', () => {
           let chunk = null
-          while ((chunk = res.read()) !== null && this.isStopped === false) {
+          while ((chunk = res.read()) !== null) {
             this._onData(chunk)
           }
         })
